@@ -35,6 +35,15 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+!client/.env.example
+!server/.env.example
+
+# workspace artifacts
+client/node_modules/
+server/node_modules/
+client/dist/
+server/dist/
 
 # vercel
 .vercel

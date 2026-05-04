@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Expense Tracker
 
-## Getting Started
+Full-stack personal finance tracker built with:
 
-First, run the development server:
+- `server`: Node.js + Express + MongoDB + Mongoose + Zod + JWT auth
+- `client`: React + Vite + TypeScript + Axios
+
+The repository uses npm workspaces with separate `client` and `server` apps.
+
+## Project Structure
+
+- `client/` - React + Vite frontend
+- `server/` - Express API (routes/services/repositories)
+
+## Setup
+
+1. Install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Configure environment variables:
+   - Copy `server/.env.example` to `server/.env`
+   - Copy `client/.env.example` to `client/.env`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Run the backend:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev:server
+```
 
-## Learn More
+4. In a second terminal, run the frontend:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev:client
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Frontend runs on `http://localhost:5173`, backend on `http://localhost:4000`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Environment Variables
 
-## Deploy on Vercel
+### Server (`server/.env`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `PORT` - API port (default `4000`)
+- `CLIENT_ORIGIN` - frontend origin for CORS
+- `MONGODB_URI` - MongoDB connection string (required)
+- `JWT_SECRET` - JWT signing secret (required)
+- `JWT_EXPIRES_IN` - token lifetime (default `7d`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Client (`client/.env`)
+
+- `VITE_API_URL` - API base URL (default `http://localhost:4000/api`)
+
+## Seed Script
+
+Seed default categories:
+
+```bash
+npm run seed:categories
+```
+
+This command inserts default categories only when the category collection is empty.
+
+## Design Decisions
+
+- Layered backend architecture: routes -> services -> repositories
+- Cookie-based JWT auth (`httpOnly`) and request-level auth middleware
+- Zod request validation with consistent API error shape
+- Dashboard summary uses grouped aggregation in repository layer
+- Budgets are persisted on the server (not localStorage)
+
+## API Highlights
+
+- Auth: signup, login, logout, me
+- Transactions: CRUD + filtering + pagination
+- Categories: authenticated list
+- Dashboard: summary and chart endpoints
+- Profile: get/update profile, change password, delete account
+- Budgets: get/upsert monthly budgets
+
+## Figma
+
+- Add your Figma file link here before submission.
+
+## Known Limitations
+
+- Automated tests are not included yet.
+- No refresh-token rotation yet.
+- Basic rate limiting is only applied to auth endpoints.
